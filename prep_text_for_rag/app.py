@@ -41,7 +41,7 @@ kg = Neo4jGraph(
 #     """
 # )
 
-# # test to see if the index was created
+# test to see if the index was created
 # res = kg.query(
 #     """
 #   SHOW VECTOR INDEXES
@@ -78,14 +78,15 @@ kg = Neo4jGraph(
 #     LIMIT 5
 #     """
 # )
-# # loop through the results
+# loop through the results
 # for record in result:
-#     print(f" bio: {record["hp.bio"]}, name: {record["hp.name"]}")
+#     # print(record)
+#     print(f" bio: {record['hp.bio']}, name: {record['hp.name']}")
 
 # == Queerying the graph for a healthcare provider
 question = "give me a list of healthcare providers in the area of dermatology"
 
-# # Execute the query
+# Execute the query
 result = kg.query(
     """
     WITH genai.vector.encode(
@@ -110,10 +111,10 @@ result = kg.query(
     },
 )
 
-# # Print the encoded question vector for debugging
-# print("Encoded question vector:", result)
+# Print the encoded question vector for debugging
+print("Encoded question vector:", result)
 
-# # Print the result
+# Print the result
 for record in result:
     print(f"Name: {record['healthcare_provider.name']}")
     print(f"Bio: {record['healthcare_provider.bio']}")

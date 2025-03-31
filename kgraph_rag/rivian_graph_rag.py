@@ -52,24 +52,24 @@ kg = Neo4jGraph(
     database=NEO4J_DATABASE,
 )
 
-# # read the wikipedia page for the Roman Empire
-raw_documents = WikipediaLoader(query="The Roman empire").load()
+# # # read the wikipedia page for the Roman Empire
+# raw_documents = WikipediaLoader(query="Rivian").load()
+# # print(raw_documents)
 
+# # # # # # Define chunking strategy
+# text_splitter = TokenTextSplitter(chunk_size=512, chunk_overlap=24)
+# documents = text_splitter.split_documents(raw_documents[:3])
+# # print(documents)
 
-# # # # Define chunking strategy
-text_splitter = TokenTextSplitter(chunk_size=512, chunk_overlap=24)
-documents = text_splitter.split_documents(raw_documents[:3])
-print(documents)
+# llm_transformer = LLMGraphTransformer(llm=chat)
+# graph_documents = llm_transformer.convert_to_graph_documents(documents)
 
-llm_transformer = LLMGraphTransformer(llm=chat)
-graph_documents = llm_transformer.convert_to_graph_documents(documents)
-
-# store to neo4j
-res = kg.add_graph_documents(
-    graph_documents,
-    include_source=True,
-    baseEntityLabel=True,
-)
+# # # store to neo4j
+# res = kg.add_graph_documents(
+#     graph_documents,
+#     include_source=True,
+#     baseEntityLabel=True,
+# )
 
 
 # Hybrid Retrieval for RAG
@@ -111,11 +111,11 @@ entity_chain = prompt | chat.with_structured_output(Entities)
 
 # Test it out:
 # res = entity_chain.invoke(
-#     {"question": "In the year of 123 there was an emperor who did not like to rule."}
+#     {"question": "What happened to Rivian in the year of 2009?"}
 # ).names
-# # print(res)
+# print(res)
 
-# Retriever
+# # Retriever
 kg.query("CREATE FULLTEXT INDEX entity IF NOT EXISTS FOR (e:__Entity__) ON EACH [e.id]")
 
 
@@ -168,7 +168,7 @@ def structured_retriever(question: str) -> str:
     return result
 
 
-# print(structured_retriever("Who is Octavian?"))
+# print(structured_retriever("What is R1S?"))
 
 
 # Final retrieval step
@@ -246,7 +246,7 @@ chain = (
 # TEST it all out!
 res_simple = chain.invoke(
     {
-        "question": "How did the Roman empire fall?",
+        "question": "When was the first R1S produced?",
     }
 )
 
